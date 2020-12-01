@@ -18,7 +18,7 @@ class CurrencyViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
 
-class PriceViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
+class PriceViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
     queryset = Price.objects.all()
     serializer_class = PriceSerializer
 
@@ -50,6 +50,17 @@ class PriceViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Upda
             instance._prefetched_objects_cache = {}
 
         return Response(serializer.data)
+
+    def perform_create(self, serializer):
+        serializer.save()
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
 
 class ItemViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):
     queryset = Item.objects.all()
