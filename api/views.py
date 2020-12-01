@@ -53,6 +53,7 @@ class PriceViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Crea
 
     def perform_create(self, serializer):
         serializer.save()
+        
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
