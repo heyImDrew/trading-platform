@@ -1,11 +1,11 @@
 from rest_framework.response import Response
 from .serializers import CurrencySerializer, PriceSerializer, ItemSerializer, UserSerializer
 from rest_framework import mixins, viewsets, status
-from rest_framework.generics import get_object_or_404, CreateAPIView
-from django.contrib.auth.models import User
-from rest_framework.permissions import AllowAny
-from django.contrib.auth.hashers import make_password
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
+from django.contrib.auth.models import User
 from app.models import Currency, Price, Item
 
 
@@ -29,11 +29,9 @@ class UserView(
         # "update": UpdateUserSerializer,
     }
 
-#    permission_classes = (IsOwnerOrAuthenticatedReadOnly, )
-
     def get_serializer_class(self):
         return self.serializer_classes.get(self.action, self.default_serializer_class)
-
+        
 class CurrencyViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     queryset = Currency.objects.all()
     serializer_class = CurrencySerializer
