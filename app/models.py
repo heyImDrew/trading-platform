@@ -43,7 +43,7 @@ class Price (
 
 class WatchList (
     models.Model
-):
+    ):
     """
     Favourite list of stocks for current user
     """
@@ -56,7 +56,7 @@ class WatchList (
 
 class Offer (
     models.Model
-):
+    ):
     """
     User offer to buy certain amount of stocks for certain price
     """
@@ -78,7 +78,7 @@ class Offer (
 
 class Trade (
     models.Model
-):
+    ):
     """
     Trading sell and buy offers
     """
@@ -96,7 +96,7 @@ class Trade (
 
 class Inventory (
     models.Model
-):
+    ):
     """
     Current user stock amount
     """
