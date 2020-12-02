@@ -31,6 +31,7 @@ class UserView (
     def get_serializer_class(self):
         return self.serializer_classes.get(self.action, self.default_serializer_class)
         
+
 class CurrencyView (
     viewsets.GenericViewSet,
     mixins.ListModelMixin, 
@@ -48,6 +49,7 @@ class CurrencyView (
 
     def get_serializer_class(self):
         return self.serializer_classes.get(self.action, self.default_serializer_class)
+
 
 class PriceView (
     viewsets.GenericViewSet,
@@ -67,6 +69,7 @@ class PriceView (
         "update": PriceSerializer,
         "create": PriceSerializer,
     }
+
 
 class ItemView (
     viewsets.GenericViewSet,

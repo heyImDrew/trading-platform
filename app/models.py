@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Currency (
     models.Model
     ):
@@ -10,6 +11,7 @@ class Currency (
 
     def __str__(self):
         return self.name
+
 
 class Item (
     models.Model
@@ -23,6 +25,7 @@ class Item (
 
     def __str__(self):
         return self.code
+
 
 class Price (
     models.Model
