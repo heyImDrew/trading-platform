@@ -2,13 +2,13 @@ from django.urls import path, include
 from rest_framework import routers
 from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token, refresh_jwt_token
 
-from .views import CurrencyViewSet, PriceViewSet, ItemViewSet, UserView
+from .views import CurrencyView, PriceView, ItemView, UserView
 
 
 router = routers.DefaultRouter()
-router.register(r'currencies', CurrencyViewSet, basename="Currencies")
-router.register(r'prices', PriceViewSet, basename="Prices")
-router.register(r'items', ItemViewSet, basename="Items")
+router.register(r'currencies', CurrencyView, basename="Currencies")
+router.register(r'prices', PriceView, basename="Prices")
+router.register(r'items', ItemView, basename="Items")
 router.register(r'reg', UserView, basename="reg")
 
 urlpatterns = [
