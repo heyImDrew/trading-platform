@@ -1,10 +1,38 @@
 from rest_framework.response import Response
-from .serializers import CurrencySerializer, PriceSerializer, ItemSerializer
+from .serializers import CurrencySerializer, PriceSerializer, ItemSerializer, UserSerializer
 from rest_framework import mixins, viewsets, status
-from rest_framework.generics import get_object_or_404
+from rest_framework.generics import get_object_or_404, CreateAPIView
+from django.contrib.auth.models import User
+from rest_framework.permissions import AllowAny
+from django.contrib.auth.hashers import make_password
 
 from app.models import Currency, Price, Item
 
+
+class UserView(
+    viewsets.GenericViewSet,
+    viewsets.mixins.CreateModelMixin,
+    viewsets.mixins.ListModelMixin,
+    viewsets.mixins.RetrieveModelMixin,
+    viewsets.mixins.UpdateModelMixin,
+):
+    permission_classes = [AllowAny,]
+    """
+    User view.
+    """
+    queryset = User.objects.all()
+    default_serializer_class = UserSerializer
+    serializer_classes = {
+        # "list": ListUserSerializer,
+        "create": UserSerializer,
+        "retrieve": UserSerializer,
+        # "update": UpdateUserSerializer,
+    }
+
+#    permission_classes = (IsOwnerOrAuthenticatedReadOnly, )
+
+    def get_serializer_class(self):
+        return self.serializer_classes.get(self.action, self.default_serializer_class)
 
 class CurrencyViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     queryset = Currency.objects.all()
@@ -53,7 +81,6 @@ class PriceViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Crea
 
     def perform_create(self, serializer):
         serializer.save()
-        
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
