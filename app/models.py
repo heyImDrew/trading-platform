@@ -73,7 +73,7 @@ class Offer (
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
-        return item.code + " offer by " + user.username + ": " + str(amount) + " for " + str(price) + item.currency.name
+        return self.item.code + " offer by " + self.user.username + ": " + str(self.amount) + " for " + str(self.price) + self.item.currency.name
 
 
 class Trade (
@@ -91,7 +91,7 @@ class Trade (
     buyer_offer = models.ForeignKey("Offer", blank=False, null=False, on_delete=models.CASCADE, related_name="buyer_offer")
 
     def __str__(self):
-        return seller.username + " & " + buyer.username + " offer: " + str(amount) + item.name + " for " + str(price)
+        return self.seller.username + " & " + self.buyer.username + " offer: " + str(self.amount) + self.item.name + " for " + str(self.price)
 
 
 class Inventory (
@@ -105,4 +105,4 @@ class Inventory (
     amount = models.IntegerField(blank=False, null=False)
 
     def __str__(self):
-        return user.username + ": " + str(amount) + " of " + item.name
+        return self.user.username + ": " + str(self.amount) + " of " + self.item.name

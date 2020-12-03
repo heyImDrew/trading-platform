@@ -100,6 +100,7 @@ class WatchListView (
     viewsets.GenericViewSet,
     mixins.ListModelMixin, 
     mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
     ):
     """
     WatchList view
@@ -109,6 +110,7 @@ class WatchListView (
     serializer_classes = {
         "list": WatchListSerializer,
         "retrieve": WatchListSerializer,
+        "update": WatchListSerializer,
     }
 
     def get_serializer_class(self):
