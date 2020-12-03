@@ -48,10 +48,10 @@ class WatchList (
     Favourite list of stocks for current user
     """
     user = models.OneToOneField(User, blank=False, null=False, on_delete=models.CASCADE)
-    items = models.ForeignKey("Item", null=True, blank=False, on_delete=models.SET_NULL)
+    items = models.ManyToManyField("Item", blank=True)
 
     def __str__(self):
-        return user.username + "'s watchlist"
+        return self.user.username + "'s watchlist"
 
 
 class Offer (

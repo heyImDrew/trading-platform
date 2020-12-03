@@ -5,8 +5,9 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 from django.contrib.auth.models import User
-from app.models import Currency, Price, Item
-from .serializers import CurrencySerializer, PriceSerializer, ItemSerializer, UserSerializer
+from app.models import Currency, Price, Item, WatchList, Trade, Offer, Inventory
+from .serializers import CurrencySerializer, PriceSerializer, ItemSerializer, UserSerializer, \
+                            WatchListSerializer, TradeSerializer, OfferSerializer, InventorySerializer
 
 
 class UserView (
@@ -18,7 +19,7 @@ class UserView (
     ):
     permission_classes = [AllowAny,]
     """
-    User view.
+    User view
     """
     queryset = User.objects.all()
     default_serializer_class = UserSerializer
@@ -38,7 +39,7 @@ class CurrencyView (
     mixins.RetrieveModelMixin,
     ):
     """
-    Currency view.
+    Currency view
     """
     queryset = Currency.objects.all()
     default_serializer_class = CurrencySerializer
@@ -59,7 +60,7 @@ class PriceView (
     mixins.UpdateModelMixin
     ):
     """
-    Price view.
+    Price view
     """
     queryset = Price.objects.all()
     default_serializer_class = PriceSerializer
@@ -70,6 +71,9 @@ class PriceView (
         "create": PriceSerializer,
     }
 
+    def get_serializer_class(self):
+        return self.serializer_classes.get(self.action, self.default_serializer_class)
+
 
 class ItemView (
     viewsets.GenericViewSet,
@@ -78,7 +82,7 @@ class ItemView (
     mixins.CreateModelMixin, 
     ):
     """
-    Item view.
+    Item view
     """
     queryset = Item.objects.all()
     default_serializer_class = ItemSerializer
@@ -90,3 +94,87 @@ class ItemView (
 
     def get_serializer_class(self):
         return self.serializer_classes.get(self.action, self.default_serializer_class)
+
+
+class WatchListView (
+    viewsets.GenericViewSet,
+    mixins.ListModelMixin, 
+    mixins.RetrieveModelMixin,
+    ):
+    """
+    WatchList view
+    """
+    queryset = WatchList.objects.all()
+    default_serializer_class = WatchListSerializer
+    serializer_classes = {
+        "list": WatchListSerializer,
+        "retrieve": WatchListSerializer,
+    }
+
+    def get_serializer_class(self):
+        return self.serializer_classes.get(self.action, self.default_serializer_class)
+
+
+class TradeView(
+    viewsets.GenericViewSet,
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.CreateModelMixin,
+    ):
+    """
+    Trade view
+    """
+    queryset = Trade.objects.all()
+    default_serializer_class = TradeSerializer
+    serializers_classes = {
+        "list": TradeSerializer,
+        "retrieve": TradeSerializer,
+        "create": TradeSerializer,
+    }
+
+    def get_serializer_class(self):
+        return self.serializers_classes.get(self.action, self.default_serializer_class)
+
+
+class OfferView(
+    viewsets.GenericViewSet,
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.CreateModelMixin,
+    ):
+    """
+    Offer view
+    """
+    queryset = Offer.objects.all()
+    default_serializer_class = OfferSerializer
+    serializers_classes = {
+        "list": OfferSerializer,
+        "retrieve": OfferSerializer,
+        "create": OfferSerializer,
+    }
+
+    def get_serializer_class(self):
+        return self.serializers_classes.get(self.action, self.default_serializer_class)
+
+
+class InventoryView (
+    viewsets.GenericViewSet,
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.CreateModelMixin,
+    mixins.UpdateModelMixin,
+    ):
+    """
+    Inventory view
+    """
+    queryset = Inventory.objects.all()
+    default_serializer_class = InventorySerializer
+    serializers_classes = {
+        "list": InventorySerializer,
+        "retrieve": InventorySerializer,
+        "create": InventorySerializer,
+        "update": InventorySerializer,
+    }
+
+    def get_serializer_class(self):
+        return self.serializers_classes.get(self.action, self.default_serializer_class)

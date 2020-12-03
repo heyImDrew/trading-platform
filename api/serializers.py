@@ -2,7 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 
-from app.models import Currency, Price, Item
+from app.models import Currency, Price, Item, WatchList, Offer, Inventory, Trade
 
 
 class UserSerializer (
@@ -49,4 +49,48 @@ class ItemSerializer(
     """
     class Meta:
         model = Item
+        fields = "__all__"
+
+
+class WatchListSerializer(
+    serializers.ModelSerializer
+    ):
+    """
+    Serializer for WatchList
+    """
+    class Meta:
+        model = WatchList
+        fields = "__all__"
+
+
+class OfferSerializer(
+    serializers.ModelSerializer
+    ):
+    """
+    Serializer for Offer
+    """
+    class Meta:
+        model = Offer
+        fields = "__all__"
+
+
+class InventorySerializer(
+    serializers.ModelSerializer
+    ):
+    """
+    Serializer for Inventory
+    """
+    class Meta:
+        model = Inventory
+        fields = "__all__"
+
+    
+class TradeSerializer(
+    serializers.ModelSerializer
+    ):
+    """
+    Serializer for Trade
+    """
+    class Meta:
+        model = Trade
         fields = "__all__"
