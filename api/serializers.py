@@ -1,8 +1,8 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from django.contrib.auth.hashers import make_password
 
-from app.models import Currency, Price, Item, WatchList, Offer, Inventory, Trade
+from app.models import Currency, Price, Item, WatchList, Offer, Inventory, Trade, Money
 
 
 class UserSerializer(
@@ -101,4 +101,16 @@ class TradeSerializer(
 
     class Meta:
         model = Trade
+        fields = "__all__"
+
+
+class MoneySerializer(
+    serializers.ModelSerializer
+):
+    """
+    Serializer for Money
+    """
+
+    class Meta:
+        model = Money
         fields = "__all__"

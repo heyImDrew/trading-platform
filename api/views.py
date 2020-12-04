@@ -5,19 +5,19 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 from django.contrib.auth.models import User
-from app.models import Currency, Price, Item, WatchList, Trade, Offer, Inventory
+from app.models import Currency, Price, Item, WatchList, Trade, Offer, Inventory, Money
 from .serializers import CurrencySerializer, PriceSerializer, ItemSerializer, UserSerializer, \
-                            WatchListSerializer, TradeSerializer, OfferSerializer, InventorySerializer
+    WatchListSerializer, TradeSerializer, OfferSerializer, InventorySerializer, MoneySerializer
 
 
-class UserView (
+class UserView(
     viewsets.GenericViewSet,
     viewsets.mixins.CreateModelMixin,
     viewsets.mixins.ListModelMixin,
     viewsets.mixins.RetrieveModelMixin,
     viewsets.mixins.UpdateModelMixin,
-    ):
-    permission_classes = [AllowAny,]
+):
+    permission_classes = [AllowAny, ]
     """
     User view
     """
@@ -31,19 +31,19 @@ class UserView (
 
     def get_serializer_class(self):
         return self.serializer_classes.get(self.action, self.default_serializer_class)
-        
 
-class CurrencyView (
+
+class CurrencyView(
     viewsets.GenericViewSet,
-    mixins.ListModelMixin, 
+    mixins.ListModelMixin,
     mixins.RetrieveModelMixin,
-    ):
+):
     """
     Currency view
     """
     queryset = Currency.objects.all()
     default_serializer_class = CurrencySerializer
-    serializer_classes =  {
+    serializer_classes = {
         "list": CurrencySerializer,
         "retrieve": CurrencySerializer,
     }
@@ -52,13 +52,13 @@ class CurrencyView (
         return self.serializer_classes.get(self.action, self.default_serializer_class)
 
 
-class PriceView (
+class PriceView(
     viewsets.GenericViewSet,
-    mixins.ListModelMixin, 
-    mixins.RetrieveModelMixin, 
-    mixins.CreateModelMixin, 
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.CreateModelMixin,
     mixins.UpdateModelMixin
-    ):
+):
     """
     Price view
     """
@@ -75,12 +75,12 @@ class PriceView (
         return self.serializer_classes.get(self.action, self.default_serializer_class)
 
 
-class ItemView (
+class ItemView(
     viewsets.GenericViewSet,
-    mixins.ListModelMixin, 
-    mixins.RetrieveModelMixin, 
-    mixins.CreateModelMixin, 
-    ):
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.CreateModelMixin,
+):
     """
     Item view
     """
@@ -96,12 +96,12 @@ class ItemView (
         return self.serializer_classes.get(self.action, self.default_serializer_class)
 
 
-class WatchListView (
+class WatchListView(
     viewsets.GenericViewSet,
-    mixins.ListModelMixin, 
+    mixins.ListModelMixin,
     mixins.RetrieveModelMixin,
     mixins.UpdateModelMixin,
-    ):
+):
     """
     WatchList view
     """
@@ -122,7 +122,7 @@ class TradeView(
     mixins.ListModelMixin,
     mixins.RetrieveModelMixin,
     mixins.CreateModelMixin,
-    ):
+):
     """
     Trade view
     """
@@ -143,7 +143,7 @@ class OfferView(
     mixins.ListModelMixin,
     mixins.RetrieveModelMixin,
     mixins.CreateModelMixin,
-    ):
+):
     """
     Offer view
     """
@@ -159,13 +159,13 @@ class OfferView(
         return self.serializers_classes.get(self.action, self.default_serializer_class)
 
 
-class InventoryView (
+class InventoryView(
     viewsets.GenericViewSet,
     mixins.ListModelMixin,
     mixins.RetrieveModelMixin,
     mixins.CreateModelMixin,
     mixins.UpdateModelMixin,
-    ):
+):
     """
     Inventory view
     """
@@ -176,6 +176,27 @@ class InventoryView (
         "retrieve": InventorySerializer,
         "create": InventorySerializer,
         "update": InventorySerializer,
+    }
+
+    def get_serializer_class(self):
+        return self.serializers_classes.get(self.action, self.default_serializer_class)
+
+
+class MoneyView(
+    viewsets.GenericViewSet,
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+):
+    """
+    Money view
+    """
+    queryset = Money.objects.all()
+    default_serializer_class = MoneySerializer
+    serializers_classes = {
+        "list": MoneySerializer,
+        "retrieve": MoneySerializer,
+        "update": MoneySerializer,
     }
 
     def get_serializer_class(self):

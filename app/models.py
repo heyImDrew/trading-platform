@@ -2,9 +2,9 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-class Currency (
+class Currency(
     models.Model
-    ):
+):
     """
     Currencies for stock pricing
     """
@@ -14,9 +14,9 @@ class Currency (
         return self.name
 
 
-class Item (
+class Item(
     models.Model
-    ):
+):
     """
     Stock
     """
@@ -28,9 +28,9 @@ class Item (
         return self.code
 
 
-class Price (
+class Price(
     models.Model
-    ):
+):
     """
     Price of stock
     """
@@ -41,9 +41,9 @@ class Price (
         return self.item.code + " " + str(self.price) + " " + self.item.currency.name
 
 
-class WatchList (
+class WatchList(
     models.Model
-    ):
+):
     """
     Favourite list of stocks for current user
     """
@@ -54,9 +54,9 @@ class WatchList (
         return self.user.username + "'s watchlist"
 
 
-class Offer (
+class Offer(
     models.Model
-    ):
+):
     """
     User offer to buy certain amount of stocks for certain price
     """
@@ -73,12 +73,13 @@ class Offer (
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.item.code + " offer by " + self.user.username + ": " + str(self.amount) + " for " + str(self.price) + self.item.currency.name
+        return self.item.code + " offer by " + self.user.username + ": " + str(self.amount) + " for " + str(
+            self.price) + self.item.currency.name
 
 
-class Trade (
+class Trade(
     models.Model
-    ):
+):
     """
     Trading sell and buy offers
     """
@@ -86,23 +87,40 @@ class Trade (
     amount = models.IntegerField(blank=False, null=False)
     price = models.DecimalField(max_digits=5, decimal_places=2, blank=False, null=False)
     seller = models.ForeignKey(User, blank=False, null=False, on_delete=models.CASCADE, related_name="seller")
-    seller_offer = models.ForeignKey("Offer", blank=False, null=False, on_delete=models.CASCADE, related_name="seller_offer")
+    seller_offer = models.ForeignKey("Offer", blank=False, null=False, on_delete=models.CASCADE,
+                                     related_name="seller_offer")
     buyer = models.ForeignKey(User, blank=False, null=False, on_delete=models.CASCADE, related_name="buyer")
-    buyer_offer = models.ForeignKey("Offer", blank=False, null=False, on_delete=models.CASCADE, related_name="buyer_offer")
+    buyer_offer = models.ForeignKey("Offer", blank=False, null=False, on_delete=models.CASCADE,
+                                    related_name="buyer_offer")
 
     def __str__(self):
-        return self.seller.username + " & " + self.buyer.username + " offer: " + str(self.amount) + self.item.name + " for " + str(self.price)
+        return self.seller.username + " & " + self.buyer.username + " offer: " + str(
+            self.amount) + self.item.name + " for " + str(self.price)
 
 
-class Inventory (
+class Inventory(
     models.Model
-    ):
+):
     """
     Current user stock amount
     """
     user = models.ForeignKey(User, blank=False, null=False, on_delete=models.CASCADE)
-    item = models.ForeignKey("Item", null=True, blank=False, on_delete=models.CASCADE)
+    item = models.ForeignKey("Item", null=False, blank=False, on_delete=models.CASCADE)
     amount = models.IntegerField(blank=False, null=False)
 
     def __str__(self):
         return self.user.username + ": " + str(self.amount) + " of " + self.item.name
+
+
+class Money(
+    models.Model
+):
+    """
+    Amount of user's money
+    """
+    user = models.ForeignKey(User, blank=False, null=False, on_delete=models.CASCADE)
+    money = models.IntegerField(blank=False, null=False)
+    currency = models.ForeignKey("Currency", on_delete=models.CASCADE, blank=False, null=False)
+
+    def __str__(self):
+        return self.user.username + ": " + str(self.money) + " " + self.currency.name
