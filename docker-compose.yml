@@ -5,10 +5,8 @@ services:
     image: "postgres:11"
     volumes:
       - postgres_data:/var/lib/postgresql/data/
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=postgres
+    env_file:
+      - .env.dev
   web:
     build: .
     command: python /trading_platform/manage.py runserver 0.0.0.0:8000
@@ -21,13 +19,24 @@ services:
     depends_on:
       - db
   redis:
-    image: redis:latest
+    image: redis
+    ports:
+      - 6379:6379
+    command: redis-server
+    volumes:
+      - .redis_data:/data
   celery:
     build: .
     volumes:
       - .:/src
     command: celery -A trading_platform worker -B -l info
+    env_file:
+      - .env.dev
     links:
+      - redis
+    depends_on:
+      - db
+      - web
       - redis
 
 volumes:
