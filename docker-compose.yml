@@ -23,11 +23,10 @@ services:
   redis:
     image: redis:latest
   celery:
-    image: celery:3.1.26
     build: .
     volumes:
       - .:/src
-    command: celery --version
+    command: celery -A trading_platform worker -B -l info
     links:
       - redis
 
