@@ -68,13 +68,14 @@ class Offer(
     user = models.ForeignKey(User, blank=False, null=False, on_delete=models.CASCADE)
     item = models.ForeignKey("Item", null=False, blank=False, on_delete=models.CASCADE)
     amount = models.IntegerField(blank=False, null=False)
-    price = models.DecimalField(max_digits=5, decimal_places=2, blank=False, null=False)
+    price = models.DecimalField(max_digits=15, decimal_places=2, blank=False, null=False)
     type = models.IntegerField(choices=ORDER_TYPE_CHOICES)
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.item.code + " offer by " + self.user.username + ": " + str(self.amount) + " for " + str(
-            self.price) + self.item.currency.name
+        return str(self.ORDER_TYPE_CHOICES[self.type][1]) + " | " + self.item.code + \
+            " offer by " + self.user.username + ": " + str(self.amount) + " for " + str(self.price) + \
+               " " + self.item.currency.name + " | IS_ACTIVE:" + str(self.is_active)
 
 
 class Trade(
@@ -85,7 +86,7 @@ class Trade(
     """
     item = models.ForeignKey("Item", null=True, blank=False, on_delete=models.CASCADE)
     amount = models.IntegerField(blank=False, null=False)
-    price = models.DecimalField(max_digits=5, decimal_places=2, blank=False, null=False)
+    price = models.DecimalField(max_digits=15, decimal_places=2, blank=False, null=False)
     seller = models.ForeignKey(User, blank=False, null=False, on_delete=models.CASCADE, related_name="seller")
     seller_offer = models.ForeignKey("Offer", blank=False, null=False, on_delete=models.CASCADE,
                                      related_name="seller_offer")
