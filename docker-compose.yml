@@ -3,8 +3,6 @@ version: '3'
 services:
   db:
     image: "postgres:11"
-    environment:
-      - "POSTGRES_HOST_AUTH_METHOD=trust"
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     environment:
@@ -22,6 +20,16 @@ services:
       ./.env.dev
     depends_on:
       - db
+  redis:
+    image: redis:latest
+  celery:
+    image: celery:3.1.26
+    build: .
+    volumes:
+      - .:/src
+    command: celery --version
+    links:
+      - redis
 
 volumes:
   postgres_data:
