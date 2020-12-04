@@ -66,7 +66,7 @@ class Offer (
     )
 
     user = models.ForeignKey(User, blank=False, null=False, on_delete=models.CASCADE)
-    item = models.ForeignKey("Item", null=True, blank=False, on_delete=models.CASCADE)
+    item = models.ForeignKey("Item", null=False, blank=False, on_delete=models.CASCADE)
     amount = models.IntegerField(blank=False, null=False)
     price = models.DecimalField(max_digits=5, decimal_places=2, blank=False, null=False)
     type = models.IntegerField(choices=ORDER_TYPE_CHOICES)
