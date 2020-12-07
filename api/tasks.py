@@ -26,7 +26,10 @@ def money_action(user, amount, action):
 
 
 def get_item_price(offer):
-    return offer.price / offer.amount
+    if offer.amount != 0:
+        return offer.price / offer.amount
+    else:
+        return 0
 
 
 def find_most_profit_offer(offers):
@@ -58,10 +61,14 @@ def make_trade(offer_b, offer_s):
     # Offers & inventories amount actions
     offer_b.amount -= amount;
     offer_s.amount -= amount;
-    inventory_b = get_object_or_404(Inventory, user=offer_b.user, item=offer_b.item)
+    if Inventory.objects.filter(user=offer_b.user, item=offer_b.item).exists():
+        inventory_b = get_object_or_404(Inventory, user=offer_b.user, item=offer_b.item)
+    else:
+        inventory_b = Inventory(user=offer_b.user, item=offer_b.item, amount=0)
+        inventory_b.save()
     inventory_s = get_object_or_404(Inventory, user=offer_s.user, item=offer_s.item)
-    inventory_b.amount += amount
     inventory_s.amount -= amount
+    inventory_b.amount += amount
 
     # Money actions
     money_action(offer_b.user, amount, "-")
