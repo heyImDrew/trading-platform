@@ -78,7 +78,10 @@ class OfferSerializer(
     def validate(self, data):
         if data['type'] == 0 and data['amount'] > \
                 get_object_or_404(Inventory, user_id=data['user'], item_id=data['item']).amount:
-            raise serializers.ValidationError("Amount user sell should be less or equals then he have in inventory.")
+            raise serializers.ValidationError("Amount of sell should be less or equals then user have in inventory.")
+        if data['type'] == 1 and data['price'] > \
+                get_object_or_404(Money, user_id=data['user']).money:
+            raise serializers.ValidationError("Price should be less or equals then user have in inventory.")
         data['is_active'] = True
         return data
 
