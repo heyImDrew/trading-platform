@@ -37,6 +37,7 @@ ALLOWED_HOSTS = ['*']
 CONNECTED_APPS = [
     'app',
     'api',
+    'signals',
 ]
 
 DJANGO_APPS = [
@@ -140,6 +141,10 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
+]
+
+DEBUG_TOOLBAR_PANELS = [
+    'debug_toolbar.panels.signals.SignalDebugPanel',
 ]
 
 
