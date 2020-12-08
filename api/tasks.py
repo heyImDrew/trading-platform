@@ -26,6 +26,7 @@ def find_suitable_offers(offer_b, offers):
         most_s = find_most_suitable_offer(suitable_offers)
         make_trade(offer_b, most_s)
 
+
 def make_trade(offer_b, offer_s):
     print("MAKING TRADE ON:", offer_b, offer_s)
 
@@ -84,7 +85,7 @@ def is_offer_suitable(offer_b, offer_s):
 
 
 def get_item_price(offer):
-    return offer.price/offer.amount
+    return offer.price / offer.amount
 
 
 def find_most_suitable_offer(offers):
