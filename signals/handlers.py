@@ -10,18 +10,20 @@ from app.models import Money, WatchList
 
 @receiver(post_save, sender=User)
 def watchlist_autocreatiion(instance, **kwargs):
-    watchlist = WatchList(user=get_object_or_404(User, username=instance))
-    watchlist.save()
-    print("WatchList created!")
+    if not (WatchList.objects.filter(user=get_object_or_404(User, username=instance)).exists()):
+        watchlist = WatchList(user=get_object_or_404(User, username=instance))
+        watchlist.save()
+        print("WatchList created!")
 
 
 @receiver(post_save, sender=User)
 def wallet_autocreation(instance, **kwargs):
-    wallet_usd = Money(user=get_object_or_404(User, username=instance), money=0, currency_id=1)
-    wallet_eur = Money(user=get_object_or_404(User, username=instance), money=0, currency_id=2)
-    wallet_usd.save()
-    wallet_eur.save()
-    print("Wallets created!")
+    if not (Money.objects.filter(user=get_object_or_404(User, username=instance))):
+        wallet_usd = Money(user=get_object_or_404(User, username=instance), money=0, currency_id=1)
+        wallet_eur = Money(user=get_object_or_404(User, username=instance), money=0, currency_id=2)
+        wallet_usd.save()
+        wallet_eur.save()
+        print("Wallets created!")
 
 
 @receiver(pre_save, sender=User)
