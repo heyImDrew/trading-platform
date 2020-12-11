@@ -10,14 +10,25 @@ class Command(BaseCommand):
         parser.add_argument('id', nargs=1, type=int)
 
     def handle(self, *args, **options):
-        id = options['id'][0]
-
-        offers_b = Offer.objects.filter(user_id=id, type=1, is_active=True)
-        offers_s = Offer.objects.filter(type=0, is_active=True)
-        for offer_b in offers_b:
-            suitable_offers = []
-            for offer_s in offers_s:
-                if is_offer_suitable(offer_b, offer_s):
-                    suitable_offers.append(offer_s)
-            most_suitable = find_most_suitable_offer(suitable_offers)
-            make_trade(offer_b, most_suitable)
+        user_id = options['id'][0]
+        offers_b_iter = iter(Offer.objects.filter(user_id=user_id, type=1, is_active=True))
+        next_b_exist = True
+        while next_b_exist:
+            try:
+                offer_b = next(offers_b_iter)
+            except StopIteration:
+                next_b_exist = False
+            else:
+                offers_s_iter = iter(Offer.objects.filter(type=0, is_active=True))
+                suitable_offers = []
+                next_s_exist = True
+                while next_s_exist:
+                    try:
+                        offer_s = next(offers_s_iter)
+                    except StopIteration:
+                        next_s_exist = False
+                    else:
+                        if is_offer_suitable(offer_b, offer_s):
+                            suitable_offers.append(offer_s)
+                        most_suitable = find_most_suitable_offer(suitable_offers)
+                        make_trade(offer_b, most_suitable)
