@@ -10,11 +10,27 @@ from app.models import Offer, Trade, Money, Inventory
 def offer_selection():
     offers = list(Offer.objects.all())
     offers_type_lists = offer_lists_creator(offers)
-    offers_buy = offers_type_lists[0]
-    for offer in offers_buy:
-        offers_type_lists = offer_lists_creator(offers)
-        offers_sell = offers_type_lists[1]
-        find_suitable_offers(offer, offers_sell)
+    offers_b_iter = iter(offers_type_lists[0])
+    next_b_exist = True
+    while next_b_exist:
+        try:
+            offer_b = next(offers_b_iter)
+        except StopIteration:
+            next_b_exist = False
+        else:
+            offers_s_iter = iter(Offer.objects.filter(type=0, is_active=True))
+            suitable_offers = []
+            next_s_exist = True
+            while next_s_exist:
+                try:
+                    offer_s = next(offers_s_iter)
+                except StopIteration:
+                    next_s_exist = False
+                else:
+                    if is_offer_suitable(offer_b, offer_s):
+                        suitable_offers.append(offer_s)
+                    most_suitable = find_most_suitable_offer(suitable_offers)
+                    make_trade(offer_b, most_suitable)
 
 
 def find_suitable_offers(offer_b, offers):
