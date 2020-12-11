@@ -56,8 +56,8 @@ def make_trade(offer_b, offer_s):
     inventory_b.amount += amount
 
     # Money actions
-    money_action(offer_b.user, amount, "-")
-    money_action(offer_s.user, amount, "+")
+    money_action(offer_b.user, amount, offer_b.item.currency_id, "-")
+    money_action(offer_s.user, amount, offer_s.item.currency_id, "+")
 
     # Check if offer is closed
     if offer_b.amount == 0:
@@ -89,11 +89,11 @@ def get_item_price(offer):
 
 
 def find_most_suitable_offer(offers):
-    responce = offers[0]
+    response = offers[0]
     for offer in offers[1:]:
-        if get_item_price(offer) < get_item_price(responce):
-            responce = offer
-    return responce
+        if get_item_price(offer) < get_item_price(response):
+            response = offer
+    return response
 
 
 def offer_lists_creator(offers_list):
@@ -102,8 +102,8 @@ def offer_lists_creator(offers_list):
     return [offers_buy, offers_sell]
 
 
-def money_action(user, amount, action):
-    money = get_object_or_404(Money, user=user)
+def money_action(user, amount, currency, action):
+    money = get_object_or_404(Money, user=user, currency_id=currency)
     if action == "-":
         money.money -= amount
     if action == "+":
