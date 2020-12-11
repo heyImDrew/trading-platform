@@ -22,7 +22,7 @@ class Item(
     """
     name = models.CharField(max_length=255, unique=True, blank=False, null=False)
     code = models.CharField(max_length=255, unique=True, blank=False, null=False)
-    currency = models.ForeignKey("Currency", on_delete=models.CASCADE, blank=False, null=False)
+    currency = models.ForeignKey("Currency", on_delete=models.CASCADE, blank=False, null=False, related_name="item_currency")
 
     def __str__(self):
         return self.code
@@ -35,7 +35,7 @@ class Price(
     Price of stock
     """
     price = models.DecimalField(max_digits=5, decimal_places=2, blank=False, null=False)
-    item = models.OneToOneField("Item", on_delete=models.CASCADE)
+    item = models.OneToOneField("Item", on_delete=models.CASCADE, related_name="item_price")
 
     def __str__(self):
         return self.item.code + " " + str(self.price) + " " + self.item.currency.name
@@ -47,8 +47,8 @@ class WatchList(
     """
     Favourite list of stocks for current user
     """
-    user = models.OneToOneField(User, blank=False, null=False, on_delete=models.CASCADE)
-    items = models.ManyToManyField("Item", blank=True)
+    user = models.OneToOneField(User, blank=False, null=False, on_delete=models.CASCADE, related_name="watchlist_user")
+    items = models.ManyToManyField("Item", blank=True, related_name="watchlist_items")
 
     def __str__(self):
         return self.user.username + "'s watchlist"
@@ -65,8 +65,8 @@ class Offer(
         (1, "Buy"),
     )
 
-    user = models.ForeignKey(User, blank=False, null=False, on_delete=models.CASCADE)
-    item = models.ForeignKey("Item", null=False, blank=False, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, blank=False, null=False, on_delete=models.CASCADE, related_name="offer_user")
+    item = models.ForeignKey("Item", null=False, blank=False, on_delete=models.CASCADE, related_name="offer_item")
     amount = models.IntegerField(blank=False, null=False)
     price = models.DecimalField(max_digits=15, decimal_places=2, blank=False, null=False)
     type = models.IntegerField(choices=ORDER_TYPE_CHOICES)
@@ -84,7 +84,7 @@ class Trade(
     """
     Trading sell and buy offers
     """
-    item = models.ForeignKey("Item", null=True, blank=False, on_delete=models.CASCADE)
+    item = models.ForeignKey("Item", null=True, blank=False, on_delete=models.CASCADE, related_name="trade_item")
     amount = models.IntegerField(blank=False, null=False)
     price = models.DecimalField(max_digits=15, decimal_places=2, blank=False, null=False)
     seller = models.ForeignKey(User, blank=False, null=False, on_delete=models.CASCADE, related_name="seller")
@@ -105,8 +105,8 @@ class Inventory(
     """
     Current user stock amount
     """
-    user = models.ForeignKey(User, blank=False, null=False, on_delete=models.CASCADE)
-    item = models.ForeignKey("Item", null=False, blank=False, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, blank=False, null=False, on_delete=models.CASCADE, related_name="inventory_user")
+    item = models.ForeignKey("Item", null=False, blank=False, on_delete=models.CASCADE, related_name="inventory_item")
     amount = models.IntegerField(blank=False, null=False)
 
     def __str__(self):
@@ -119,9 +119,9 @@ class Money(
     """
     Amount of user's money
     """
-    user = models.ForeignKey(User, blank=False, null=False, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, blank=False, null=False, on_delete=models.CASCADE, related_name="money_user")
     money = models.IntegerField(blank=False, null=False)
-    currency = models.ForeignKey("Currency", on_delete=models.CASCADE, blank=False, null=False)
+    currency = models.ForeignKey("Currency", on_delete=models.CASCADE, blank=False, null=False, related_name="money_currency")
 
     def __str__(self):
         return self.user.username + ": " + str(self.money) + " " + self.currency.name
