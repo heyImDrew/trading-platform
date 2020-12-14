@@ -37,7 +37,7 @@ ALLOWED_HOSTS = ['*']
 CONNECTED_APPS = [
     'app',
     'api',
-    'signals',
+    'app.signals',
 ]
 
 DJANGO_APPS = [
