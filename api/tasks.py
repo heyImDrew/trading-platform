@@ -57,8 +57,12 @@ def make_trade(offer_b, offer_s):
     total_price = amount * get_item_price(offer_s)
 
     # Making trade
-    trade = Trade(item=offer_b.item, amount=amount, price=total_price, \
-                  seller=offer_s.user, seller_offer=offer_s, buyer=offer_b.user, \
+    trade = Trade(item=offer_b.item,
+                  amount=amount,
+                  price=total_price,
+                  seller=offer_s.user,
+                  seller_offer=offer_s,
+                  buyer=offer_b.user,
                   buyer_offer=offer_b)
 
     # Offers & inventories amount actions
@@ -93,8 +97,8 @@ def make_trade(offer_b, offer_s):
 
 
 def is_offer_suitable(offer_b, offer_s):
-    if offer_b.user != offer_s.user and offer_b.item == offer_s.item and \
-            get_item_price(offer_b) >= get_item_price(offer_s):
+    if (offer_b.user != offer_s.user and offer_b.item == offer_s.item) and (
+            get_item_price(offer_b) >= get_item_price(offer_s)):
         return True
     else:
         return False
