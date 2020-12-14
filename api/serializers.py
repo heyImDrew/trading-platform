@@ -2,7 +2,16 @@ from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 from django.contrib.auth.models import User
 
-from app.models import Currency, Price, Item, WatchList, Offer, Inventory, Trade, Money
+from app.models import (
+    Currency,
+    Price,
+    Item,
+    WatchList,
+    Offer,
+    Inventory,
+    Trade,
+    Money
+)
 
 
 class UserSerializer(
