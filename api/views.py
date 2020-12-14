@@ -5,9 +5,27 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 from django.contrib.auth.models import User
-from app.models import Currency, Price, Item, WatchList, Trade, Offer, Inventory, Money
-from .serializers import CurrencySerializer, PriceSerializer, ItemSerializer, UserSerializer, \
-    WatchListSerializer, TradeSerializer, OfferSerializer, InventorySerializer, MoneySerializer
+from app.models import (
+    Currency,
+    Price,
+    Item,
+    WatchList,
+    Trade,
+    Offer,
+    Inventory,
+    Money
+)
+from .serializers import (
+    CurrencySerializer,
+    PriceSerializer,
+    ItemSerializer,
+    UserSerializer,
+    WatchListSerializer,
+    TradeSerializer,
+    OfferSerializer,
+    InventorySerializer,
+    MoneySerializer
+)
 
 
 class UserView(

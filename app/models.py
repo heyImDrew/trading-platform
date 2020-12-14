@@ -73,9 +73,9 @@ class Offer(
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
-        return str(self.ORDER_TYPE_CHOICES[self.type][1]) + " | " + self.item.code + \
-               " offer by " + self.user.username + ": " + str(self.amount) + " for " + str(self.price) + \
-               " " + self.item.currency.name + " | IS_ACTIVE:" + str(self.is_active)
+        return str(self.ORDER_TYPE_CHOICES[self.type][1]) + " | " + self.item.code + (
+            " offer by ") + self.user.username + ": " + str(self.amount) + " for " + str(
+            self.price) + " " + self.item.currency.name + " | IS_ACTIVE:" + str(self.is_active)
 
 
 class Trade(
