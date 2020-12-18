@@ -15,7 +15,8 @@ class CurrencyAdmin(admin.ModelAdmin):
 
 
 class ItemAdmin(admin.ModelAdmin):
-    search_fields = ('code',)
+    search_fields = ('name', 'code',)
+    list_display = ('name', 'code',)
 
 
 class WatchListAdmin(admin.ModelAdmin):
@@ -34,10 +35,15 @@ class InventoryAdmin(admin.ModelAdmin):
     search_fields = ('user__username', 'item__code')
 
 
+class MoneyAdmin(admin.ModelAdmin):
+    search_fields = ('user__username', 'currency__name',)
+    list_display = ('user', 'currency',)
+
+
 admin.site.register(Currency, CurrencyAdmin)
 admin.site.register(Item, ItemAdmin)
 admin.site.register(WatchList, WatchListAdmin)
 admin.site.register(Offer, OfferAdmin)
 admin.site.register(Trade, TradeAdmin)
 admin.site.register(Inventory, InventoryAdmin)
-admin.site.register(Money)
+admin.site.register(Money, MoneyAdmin)

@@ -121,7 +121,8 @@ class Money(
     """
     user = models.ForeignKey(User, blank=False, null=False, on_delete=models.CASCADE, related_name="money_user")
     money = models.IntegerField(blank=False, null=False)
-    currency = models.ForeignKey("Currency", on_delete=models.CASCADE, blank=False, null=False, related_name="money_currency")
+    currency = models.ForeignKey("Currency", on_delete=models.CASCADE, blank=False, null=False,
+                                 related_name="money_currency")
 
     def __str__(self):
         return self.user.username + ": " + str(self.money) + " " + self.currency.name
