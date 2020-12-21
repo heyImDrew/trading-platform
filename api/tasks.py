@@ -16,7 +16,7 @@ from api.TradeServices import (
 
 @app.task
 def offer_selection():
-    offers = list(Offer.objects.all())
+    offers = list(Offer.objects.select_related('item'))
     offers_type_lists = offer_lists_creator(offers)
     offers_b_iter = iter(offers_type_lists[0])
     next_b_exist = True
