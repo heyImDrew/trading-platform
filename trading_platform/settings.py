@@ -13,7 +13,8 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 from celery.schedules import crontab
 from pathlib import Path
 from celery import Celery
-import datetime
+from datetime import timedelta
+from trading_platform.celery import app
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -68,8 +69,8 @@ REST_FRAMEWORK = {
 JWT_AUTH = {
     'JWT_SECRET_KEY': SECRET_KEY,
     'JWT_ALLOW_REFRESH': True,
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7),
-    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=28),
+    'JWT_EXPIRATION_DELTA': timedelta(days=7),
+    'JWT_REFRESH_EXPIRATION_DELTA': timedelta(days=28),
 }
 
 # Celery
@@ -78,6 +79,13 @@ CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
+
+app.conf.beat_schedule = {
+    'offer-selection-in-10-sec': {
+        'task': 'api.tasks.offer_selection',
+        'schedule': timedelta(seconds=60),
+    },
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
