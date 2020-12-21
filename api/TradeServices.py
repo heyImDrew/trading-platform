@@ -60,10 +60,10 @@ def make_trade(offer_b, offer_s):
 
     # Saving all data
     trade.save()
-    offer_b.save()
-    offer_s.save()
-    inventory_b.save()
-    inventory_s.save()
+    offer_b.save(update_fields=["amount", "price", "is_active"])
+    offer_s.save(update_fields=["amount", "price", "is_active"])
+    inventory_b.save(update_fields=["amount"])
+    inventory_s.save(update_fields=["amount"])
 
 
 def is_offer_suitable(offer_b, offer_s):
@@ -98,4 +98,4 @@ def money_action(user, amount, currency, action):
         money.money -= amount
     if action == "+":
         money.money += amount
-    money.save()
+    money.save(update_fields=["money"])
