@@ -10,7 +10,7 @@ from app.models import (
     Offer,
     Inventory,
     Trade,
-    Money
+    Money, OfferType
 )
 
 
@@ -85,10 +85,10 @@ class OfferSerializer(
     """
 
     def validate(self, data):
-        if data['type'] == 0 and data['amount'] > get_object_or_404(
+        if data['type'] == OfferType.SELL and data['amount'] > get_object_or_404(
                 Inventory, user_id=data['user'], item_id=data['item']).amount:
             raise serializers.ValidationError("Amount of sell should be less or equals then user have in inventory.")
-        if data['type'] == 1 and data['price'] > get_object_or_404(
+        if data['type'] == OfferType.BUY and data['price'] > get_object_or_404(
                 Money, user_id=data['user']).money:
             raise serializers.ValidationError("Price should be less or equals then user have in inventory.")
         data['is_active'] = True
