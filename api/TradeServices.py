@@ -1,6 +1,10 @@
 from rest_framework.generics import get_object_or_404
 
-from app.models import Money, Inventory, Trade
+from app.models import (
+    Money,
+    Inventory,
+    Trade,
+    OfferType)
 
 
 def find_suitable_offers(offer_b, offers):
@@ -14,8 +18,6 @@ def find_suitable_offers(offer_b, offers):
 
 
 def make_trade(offer_b, offer_s):
-    print("MAKING TRADE ON:", offer_b, offer_s)
-
     price_for_item_b = get_item_price(offer_b)
     price_for_item_s = get_item_price(offer_s)
 
@@ -87,8 +89,8 @@ def find_most_suitable_offer(offers):
 
 
 def offer_lists_creator(offers_list):
-    offers_sell = [offer for offer in offers_list if (offer.type == 0 and offer.is_active == True)]
-    offers_buy = [offer for offer in offers_list if (offer.type == 1 and offer.is_active == True)]
+    offers_sell = [offer for offer in offers_list if (offer.type == OfferType.SELL.value and offer.is_active == True)]
+    offers_buy = [offer for offer in offers_list if (offer.type == OfferType.BUY.value and offer.is_active == True)]
     return [offers_buy, offers_sell]
 
 

@@ -1,3 +1,5 @@
+from enum import Enum
+
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -22,7 +24,8 @@ class Item(
     """
     name = models.CharField(max_length=255, unique=True, blank=False, null=False)
     code = models.CharField(max_length=255, unique=True, blank=False, null=False)
-    currency = models.ForeignKey("Currency", on_delete=models.CASCADE, blank=False, null=False, related_name="item_currency")
+    currency = models.ForeignKey("Currency", on_delete=models.CASCADE, blank=False, null=False,
+                                 related_name="item_currency")
 
     def __str__(self):
         return self.code
@@ -54,26 +57,31 @@ class WatchList(
         return self.user.username + "'s watchlist"
 
 
+class OfferType(Enum):
+    SELL = "SELL"
+    BUY = "BUY"
+
+    @classmethod
+    def choices(cls):
+        return tuple((i.name, i.value) for i in cls)
+
+
 class Offer(
     models.Model
 ):
     """
     User offer to buy certain amount of stocks for certain price
     """
-    ORDER_TYPE_CHOICES = (
-        (0, "Sell"),
-        (1, "Buy"),
-    )
 
     user = models.ForeignKey(User, blank=False, null=False, on_delete=models.CASCADE, related_name="offer_user")
     item = models.ForeignKey("Item", null=False, blank=False, on_delete=models.CASCADE, related_name="offer_item")
     amount = models.IntegerField(blank=False, null=False)
     price = models.DecimalField(max_digits=15, decimal_places=2, blank=False, null=False)
-    type = models.IntegerField(choices=ORDER_TYPE_CHOICES)
+    type = models.CharField(choices=OfferType.choices(), max_length=255)
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
-        return str(self.ORDER_TYPE_CHOICES[self.type][1]) + " | " + self.item.code + (
+        return str(self.type) + " | " + self.item.code + (
             " offer by ") + self.user.username + ": " + str(self.amount) + " for " + str(
             self.price) + " " + self.item.currency.name + " | IS_ACTIVE:" + str(self.is_active)
 

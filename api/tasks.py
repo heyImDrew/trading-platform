@@ -3,7 +3,7 @@ from datetime import timedelta
 from rest_framework.generics import get_object_or_404
 
 from trading_platform.celery import app
-from app.models import Offer, Trade, Money, Inventory
+from app.models import Offer, Trade, Money, Inventory, OfferType
 from api.TradeServices import (
     offer_lists_creator,
     find_most_suitable_offer,
@@ -26,7 +26,7 @@ def offer_selection():
         except StopIteration:
             next_b_exist = False
         else:
-            offers_s_iter = iter(Offer.objects.filter(type=0, is_active=True))
+            offers_s_iter = iter(Offer.objects.filter(type=OfferType.SELL.value, is_active=True))
             suitable_offers = []
             next_s_exist = True
             while next_s_exist:
