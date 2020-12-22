@@ -18,7 +18,7 @@ def watchlist_autocreatiion(instance, **kwargs):
 
 @receiver(post_save, sender=User)
 def wallet_autocreation(instance, **kwargs):
-    if not (Money.objects.filter(user=get_object_or_404(User, username=instance))):
+    if not (Money.objects.filter(user=get_object_or_404(User, username=instance.username))):
         wallet_usd = Money(user=get_object_or_404(User, username=instance.username), money=0, currency_id=1)
         wallet_eur = Money(user=get_object_or_404(User, username=instance.username), money=0, currency_id=2)
         wallet_usd.save()
